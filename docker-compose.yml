@@ -37,3 +37,24 @@ services:
       - 443:443
     networks:
       - proxy
+  transmission:
+    image: lsioarmhf/transmission-aarch64
+    container_name: transmission
+    restart: unless-stopped
+    volumes:
+      - $CONFDIR/transmission:/config
+      - $DOWNDIR:/downloads
+      - $SYNCDIR/import:/watch
+    ports:
+      - 51413:51413
+      - 51413:51413/udp
+    environment:
+      - PGID=$PGID
+      - PUID=$PUID
+      - TZ=$TZ
+    networks:
+      - proxy
+    labels:
+      traefik.frontend.rule: "Host:tor.$DOMAIN"
+      traefik.port: "9091"
+
