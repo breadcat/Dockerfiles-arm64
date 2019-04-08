@@ -6,6 +6,17 @@ networks:
     external: true
 
 services:
+  cgit:
+    build: cgit-aarch64
+    container_name: cgit
+    restart: unless-stopped
+    volumes:
+      - $SYNCDIR/src:/git
+    networks:
+      - proxy
+    labels:
+      traefik.frontend.rule: "Host:git.$DOMAIN"
+      traefik.port: "80"
   flexget:
     build: flexget-aarch64
     container_name: flexget
