@@ -31,6 +31,25 @@ services:
     restart: unless-stopped
     ports:
       - 1688:1688
+  syncthing:
+    image: lsioarmhf/syncthing-aarch64
+    container_name: syncthing
+    restart: unless-stopped
+    volumes:
+      - $CONFDIR/syncthing:/config
+      - $SYNCDIR:/vault
+      - $SAVEDIR:/saves
+    ports:
+      - 22000:22000
+      - 21027:21027/udp
+    environment:
+      - PGID=$PGID
+      - PUID=$PUID
+    networks:
+      - proxy
+    labels:
+      traefik.frontend.rule: "Host:sync.$DOMAIN"
+      traefik.port: "8384"
   traefik:
     image: arm64v8/traefik
     container_name: traefik
