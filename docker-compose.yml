@@ -1,0 +1,16 @@
+
+version: '2'
+
+networks:
+  proxy:
+    external: true
+
+services:
+  flexget:
+    build: flexget-aarch64
+    container_name: flexget
+    restart: unless-stopped
+    volumes:
+      - $CONFDIR/flexget:/config
+      - $DOWNDIR:/input
+      - $STORDIR:/output
