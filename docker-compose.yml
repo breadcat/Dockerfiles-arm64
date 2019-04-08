@@ -25,6 +25,12 @@ services:
     labels:
       traefik.frontend.rule: "Host:$DOMAIN,blog.$DOMAIN,www.$DOMAIN"
       traefik.port: "4000"
+  kms-server:
+    build: kms-server-aarch64
+    container_name: kms-server
+    restart: unless-stopped
+    ports:
+      - 1688:1688
   traefik:
     image: arm64v8/traefik
     container_name: traefik
