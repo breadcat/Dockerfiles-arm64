@@ -17,6 +17,18 @@ services:
     labels:
       traefik.frontend.rule: "Host:git.$DOMAIN"
       traefik.port: "80"
+  dir-repo:
+    build: rclone-aarch64
+    container_name: dir-repo
+    restart: unless-stopped
+    command: "--config '/config/rclone.conf' serve http '$RCLONE_REMOTE' --addr '0.0.0.0:8080'"
+    volumes:
+      - $CONFDIR/rclone:/config
+    networks:
+      - proxy
+    labels:
+      traefik.frontend.rule: "Host:repo.$DOMAIN"
+      traefik.port: "8080"
   flexget:
     build: flexget-aarch64
     container_name: flexget
