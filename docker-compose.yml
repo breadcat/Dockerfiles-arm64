@@ -6,6 +6,17 @@ networks:
     external: true
 
 services:
+  baikal:
+    build: baikal-aarch64
+    container_name: baikal
+    restart: unless-stopped
+    volumes:
+      - $CONFDIR/baikal:/var/www/baikal/Specific
+    networks:
+      - proxy
+    labels:
+      traefik.frontend.rule: "Host:dav.$DOMAIN"
+      traefik.port: "80"
   cgit:
     build: cgit-aarch64
     container_name: cgit
