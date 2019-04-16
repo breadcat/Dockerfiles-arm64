@@ -75,6 +75,31 @@ services:
       - SELF_UPDATE=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  paperless-srv:
+    build: paperless-aarch64
+    container_name: paperless-srv
+    restart: unless-stopped
+    command: ["document_consumer"]
+    depends_on:
+      - paperless-web
+    volumes:
+      - $CONFDIR/paperless:/usr/src/paperless/data
+      - $WORKDIR:/usr/src/paperless/media
+      - $SYNCDIR/import:/consume
+  paperless-web:
+    build: paperless-aarch64
+    container_name: paperless-web
+    restart: unless-stopped
+    command: ["runserver", "0.0.0.0:8000"]
+    volumes:
+      - $CONFDIR/paperless:/usr/src/paperless/data
+      - $WORKDIR:/usr/src/paperless/media
+      - $SYNCDIR/import:/consume
+    networks:
+      - proxy
+    labels:
+      traefik.frontend.rule: "Host:docs.$DOMAIN"
+      traefik.port: "8000"
   syncthing:
     image: lsioarmhf/syncthing-aarch64
     container_name: syncthing
