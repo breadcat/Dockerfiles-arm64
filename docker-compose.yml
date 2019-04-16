@@ -100,6 +100,17 @@ services:
     labels:
       traefik.frontend.rule: "Host:docs.$DOMAIN"
       traefik.port: "8000"
+  selfoss:
+    build: selfoss-aarch64
+    container_name: selfoss
+    restart: unless-stopped
+    volumes:
+      - $CONFDIR/selfoss:/var/www/html/data
+    networks:
+      - proxy
+    labels:
+      traefik.frontend.rule: "Host:rss.$DOMAIN"
+      traefik.port: "80"
   syncthing:
     image: lsioarmhf/syncthing-aarch64
     container_name: syncthing
